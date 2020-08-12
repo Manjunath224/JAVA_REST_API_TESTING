@@ -128,36 +128,9 @@ public class SimplePlaceHolderTest extends RestCalls {
     @MethodSource("getAllEmailIds")
     @Order(5)
     public void verifyEmailId(String email) {
-        assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email " + email+" in comment ID "+getAllCommentIds()[Arrays.asList(getAllEmailIds()).indexOf(email)]).isTrue();
+        assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email " + email + " in comment ID " + getAllCommentIds()[Arrays.asList(getAllEmailIds()).indexOf(email)]).isTrue();
     }
 
-//    @TestFactory
-//    public Stream<DynamicTest> getPostsForUser() {
-//        return getAllCommentIdAndEmailId().entrySet().stream().map(entrySet -> DynamicTest.dynamicTest("Comment Id " + entrySet.getKey() + " with email " + entrySet.getValue(), () -> {
-//            System.out.println(entrySet.getValue().size());
-//            for (String email : entrySet.getValue()) {
-//                System.out.println(email);
-//                assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email "+email).isTrue();
-//            }
-//        }));
-//    }
-
-//    //    ##################
-//    public static HashMap<Integer, ArrayList<String>> commentIDAndEmail2 = new HashMap<>();
-//
-//    public List<DynamicTest> getPostsForUser(Integer userId) {
-//        return postIds.get(userId).stream().map(postId -> DynamicTest.dynamicTest("UserId " + userId + " with PostId " + postId, () -> {
-//            jsonPlaceHolderUserPostCommentsResponse = getRequestWithParameter(COMMENTS, "postId", postId.toString());
-//            commentIDAndEmail2.put(postId, jsonPlaceHolderUserPostCommentsResponse.path("email"));
-//        })).collect(Collectors.toList());
-//    }
-//
-//    @TestFactory
-//    public Collection<DynamicTest> verifyCommentsForPostId() {
-//        List<DynamicTest> allTests = new ArrayList<>();
-//        userIds.forEach(userId -> allTests.addAll(getPostsForUser(userId)));
-//        return allTests;
-//    }
 
 }
 

@@ -67,7 +67,7 @@ public class PlaceHolderTest extends RestCalls {
 
     @BeforeAll
     public static void beforeAll() {
-        jsonPlaceHolderUserResponse = getRequest(USERS);
+        jsonPlaceHolderUserResponse = getRequestWithParameter(USERS,"username","");
         jsonPlaceHolderUserResponse.prettyPrint();
     }
 
@@ -121,33 +121,6 @@ public class PlaceHolderTest extends RestCalls {
         assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email " + email).isTrue();
     }
 
-//    @TestFactory
-//    public Stream<DynamicTest> getPostsForUser() {
-//        return getAllCommentIdAndEmailId().entrySet().stream().map(entrySet -> DynamicTest.dynamicTest("Comment Id " + entrySet.getKey() + " with email " + entrySet.getValue(), () -> {
-//            System.out.println(entrySet.getValue().size());
-//            for (String email : entrySet.getValue()) {
-//                System.out.println(email);
-//                assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email "+email).isTrue();
-//            }
-//        }));
-//    }
-
-//    //    ##################
-//    public static HashMap<Integer, ArrayList<String>> commentIDAndEmail2 = new HashMap<>();
-//
-//    public List<DynamicTest> getPostsForUser(Integer userId) {
-//        return postIds.get(userId).stream().map(postId -> DynamicTest.dynamicTest("UserId " + userId + " with PostId " + postId, () -> {
-//            jsonPlaceHolderUserPostCommentsResponse = getRequestWithParameter(COMMENTS, "postId", postId.toString());
-//            commentIDAndEmail2.put(postId, jsonPlaceHolderUserPostCommentsResponse.path("email"));
-//        })).collect(Collectors.toList());
-//    }
-//
-//    @TestFactory
-//    public Collection<DynamicTest> verifyCommentsForPostId() {
-//        List<DynamicTest> allTests = new ArrayList<>();
-//        userIds.forEach(userId -> allTests.addAll(getPostsForUser(userId)));
-//        return allTests;
-//    }
 
 }
 
