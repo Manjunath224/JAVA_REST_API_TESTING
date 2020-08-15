@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "https://jsonplaceholder.typicode.com/comments",
+  "type": "array",
+  "additionalItems": true,
+  "items": {
+    "anyOf": [
+      {
+        "type": "object",
+        "required": [
+          "postId",
+          "id",
+          "name",
+          "email",
+          "body"
+        ],
+        "properties": {
+          "postId": {
+            "type": "integer",
+            "pattern": "^[0-9]*$"
+          },
+          "id": {
+            "type": "integer",
+            "pattern": "^[0-9]*$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  }
+}

@@ -2,16 +2,18 @@ package services;
 
 import io.restassured.response.Response;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
 import rMethods.RestCalls;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SimplerTest extends RestCalls {
+public class JsonPlaceHolderTest extends RestCalls {
 
     public static Response jsonPlaceHolderUserResponse, jsonPlaceHolderUserPostsResponse, jsonPlaceHolderUserPostCommentsResponse;
 
@@ -25,8 +27,8 @@ public class SimplerTest extends RestCalls {
     @Order(1)
     public void verifyUsersStatusCode() {
         jsonPlaceHolderUserResponse = getRequestWithParameter(USERS, "username", getQueryNames());
-        assertThat(jsonPlaceHolderUserResponse.statusCode()).isEqualTo(HttpStatus.SC_OK);
-        jsonPlaceHolderUserResponse.prettyPrint();
+        jsonPlaceHolderUserResponse.then().log().ifError().assertThat().statusCode(HttpsURLConnection.HTTP_OK)
+                .assertThat().body(matchesJsonSchemaInClasspath("schemas/users.json"));
     }
 
     @Test
@@ -35,8 +37,8 @@ public class SimplerTest extends RestCalls {
     public void verifyPostIds() {
         ArrayList<Integer> userIds = jsonPlaceHolderUserResponse.path("id");
         jsonPlaceHolderUserPostsResponse = getRequestWithParameter(POSTS, "userId", userIds);
-        assertThat(jsonPlaceHolderUserPostsResponse.statusCode()).isEqualTo(HttpStatus.SC_OK);
-        jsonPlaceHolderUserPostsResponse.prettyPrint();
+        jsonPlaceHolderUserPostsResponse.then().log().ifError().assertThat().statusCode(HttpsURLConnection.HTTP_OK)
+                .assertThat().body(matchesJsonSchemaInClasspath("schemas/posts.json"));
     }
 
     @Test
@@ -45,11 +47,10 @@ public class SimplerTest extends RestCalls {
     public void verifyEmailIds() {
         ArrayList<Integer> postIds = jsonPlaceHolderUserPostsResponse.path("id");
         jsonPlaceHolderUserPostCommentsResponse = getRequestWithParameter(COMMENTS, "postId", postIds);
-        assertThat(jsonPlaceHolderUserPostCommentsResponse.statusCode()).isEqualTo(HttpStatus.SC_OK);
-        jsonPlaceHolderUserPostCommentsResponse.prettyPrint();
+        jsonPlaceHolderUserPostCommentsResponse.then().log().ifError().assertThat().statusCode(HttpsURLConnection.HTTP_OK)
+                .assertThat().body(matchesJsonSchemaInClasspath("schemas/comments.json"));
         ArrayList<String> emails = jsonPlaceHolderUserPostCommentsResponse.path("email");
-        emails.forEach(email -> {
-            assertThat(EmailValidator.getInstance().isValid(email)).withFailMessage("Invalid Email " + email).isTrue();
-        });
+        emails.forEach(email ->
+                assertThat("Email not valid: " + email, EmailValidator.getInstance().isValid(email), is(equalTo(true))));
     }
 }
